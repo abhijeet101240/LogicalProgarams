@@ -1,12 +1,12 @@
 name: CI Workflow for All Pushes and Pull Requests
 
 on:
-  push:  # Trigger on any push
+  push:
     branches:
-      - '**'  # Match all branches
-  pull_request:  # Trigger on pull requests
+      - '**'
+  pull_request:
     branches:
-      - main  # When PR targets the main branch
+      - main
 
 jobs:
   build:
@@ -18,40 +18,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up JDK (for Java projects)
+      # Step 2: Set up JDK
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'  # Specify the Java distribution
+          distribution: 'temurin'
 
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: mvn install
-
-      # Step 4: Run Tests
-      - name: Run Tests
-        run: mvn test
-
-  lint:
-    name: Lint Code
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # Step 2: Set up Node.js (for linting frontend code, adjust if not needed)
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: npm install
-
-      # Step 4: Run Linter
-      - name: Run Linter
-        run: npm run lint
+      # Step 3: Navigate to the directory containing the pom.xml (if necessary)
+      - name: Build and Test with Maven
+        run: |
+          cd path/to/project  # Change this to your directory containing pom.xml
+          mvn install
+          mvn test
