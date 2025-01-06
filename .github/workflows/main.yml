@@ -29,10 +29,6 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
 
-      # Step 4: Compile Java Files (Adjust path based on your directory structure)
-      - name: Compile Java Files
-        run: javac -d out $(find src -name "*.java")  # Update path based on your project
-
       # Step 5: Build Docker Image
       - name: Build Docker Image
         run: |
