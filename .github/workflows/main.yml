@@ -1,0 +1,73 @@
+name: CI Workflow for Push and Pull Requests
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**' # Include specific feature branches
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up JDK (for Java projects, adjust for other stacks)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      # Step 3: Install dependencies (for Maven projects)
+      - name: Install Dependencies
+        run: mvn install
+
+      # Step 4: Run Tests
+      - name: Run Tests
+        run: mvn test
+
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (if linting for frontend projects)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Run Linter
+      - name: Run Linter
+        run: npm run lint
+
+  deploy:
+    name: Deployment (Only on Push to Main)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Deployment Step (Placeholder, adjust for your deployment method)
+      - name: Deploy Application
+        run: |
+          echo "Deploying application to production..."
+          # Add your deployment commands here, e.g., `scp`, `kubectl apply`, etc.
