@@ -1,13 +1,12 @@
-name: CI Workflow for Push and Pull Requests
+name: CI Workflow for All Pushes and Pull Requests
 
 on:
-  push:
+  push:  # Trigger on any push
     branches:
-      - main
-      - 'feature/**' # Include specific feature branches
-  pull_request:
+      - '**'  # Match all branches
+  pull_request:  # Trigger on pull requests
     branches:
-      - main
+      - main  # When PR targets the main branch
 
 jobs:
   build:
@@ -19,13 +18,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up JDK (for Java projects, adjust for other stacks)
+      # Step 2: Set up JDK (for Java projects)
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'temurin'  # Specify the Java distribution
 
-      # Step 3: Install dependencies (for Maven projects)
+      # Step 3: Install dependencies
       - name: Install Dependencies
         run: mvn install
 
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js (if linting for frontend projects)
+      # Step 2: Set up Node.js (for linting frontend code, adjust if not needed)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -55,19 +55,3 @@ jobs:
       # Step 4: Run Linter
       - name: Run Linter
         run: npm run lint
-
-  deploy:
-    name: Deployment (Only on Push to Main)
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # Step 2: Deployment Step (Placeholder, adjust for your deployment method)
-      - name: Deploy Application
-        run: |
-          echo "Deploying application to production..."
-          # Add your deployment commands here, e.g., `scp`, `kubectl apply`, etc.
