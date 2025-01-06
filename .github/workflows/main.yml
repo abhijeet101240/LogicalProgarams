@@ -1,4 +1,4 @@
-name: CI Workflow for All Pushes and Pull Requests
+name: CI Workflow for Push and Pull Requests
 
 on:
   push:
@@ -22,12 +22,15 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '8'
           distribution: 'temurin'
 
-      # Step 3: Navigate to the directory containing the pom.xml (if necessary)
-      - name: Build and Test with Maven
+      # Step 3: Compile Java Files
+      - name: Compile Java Files
         run: |
-          cd path/to/project  # Change this to your directory containing pom.xml
-          mvn install
-          mvn test
+          javac -d out src/**/*.java
+
+      # Step 4: Run Tests (Update this step based on your testing setup)
+      - name: Run Tests
+        run: |
+          java -cp out org.junit.runner.JUnitCore com.example.MyTestClass
